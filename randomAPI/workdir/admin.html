@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+
+<h1 style="color: sienna;size: 40px">添加句子</h1>
+<form action={{ .SentencesAdd }} method="post" novalidate autocapitalize="off">
+    <div>
+        <label for="delete" >句子</label>
+        <input type="text" name="sentence" id="delete" style="width: 780px;height: 80px;">
+    </div>
+    <br>
+    <div>
+        <input type="submit" value="点击添加.">
+    </div>
+
+</form>
+<hr>
+<h1 style="color: darkseagreen;size: 40px">修改句子</h1>
+<form action={{ .SentencesUpdate }} method="post" novalidate autocapitalize="off">
+
+    <label for="updateid">句子的ID</label>
+    <input type="text" name="id" id="updateid">
+    </div>
+    <div>
+        <label for="update">句子</label>
+        <br>
+        <input type="text" name="sentence" id="update" style="width: 780px;height: 80px;" >
+    </div>
+    <br>
+    <div>
+        <input type="submit" value="点击修改.">
+    </div>
+
+</form>
+<hr>
+<h1 style="color: hotpink;size: 40px">删除句子</h1>
+<form action={{ .SentencesDelete }} method="post" novalidate autocapitalize="off">
+
+    <label for="deleteid">句子的ID</label>
+    <input type="text" name="id" id="deleteid">
+    </div>
+    <br>
+
+    <div>
+        <br>
+        <input type="submit" value="点击删除.">
+    </div>
+
+</form>
+
+<br><br>
+<a style="color: #00e2fa;size: 188px" href={{ .SentencesAll }} title="点击查询所有句子" target="_blank">查询所有句子.</a>
+<br><br>
+
+<form action={{ .FileUpload }} method="post" enctype="multipart/form-data">
+    <input type="file" name="f1">
+    <!--    <input type="file" name="f1">-->
+    <!--    <input type="file" name="f1">-->
+    <input type="submit" value="上传">
+    <br>
+    <p>视频文件数： {{ .video }}</p>
+    <p>音乐文件数： {{ .music }}</p>
+    <p>sql-sentence个数： {{ .sentence }}</p>
+</form>
+</body>
+</html>

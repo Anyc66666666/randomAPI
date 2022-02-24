@@ -1,0 +1,3 @@
+dsn: root:root@tcp(localhost:3306)/sentences?charset=utf8mb4&parseTime=true&loc=Local
+port: 8468
+host: http://127.0.0.1
