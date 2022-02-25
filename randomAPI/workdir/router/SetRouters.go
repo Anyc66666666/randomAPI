@@ -22,7 +22,9 @@ func RoutersInit(){
 func SetRouters(r *gin.Engine)*gin.Engine{
 	r.GET("/video",controller.Video)
 	r.GET("/music",controller.Music)
+	r.GET("/picture",controller.Picture)
 	r.GET("/sentence",controller.Sentence)
+
 	//------------------------
 	//sentences with mysql web html
 	//加载静态文件
@@ -41,7 +43,7 @@ func SetRouters(r *gin.Engine)*gin.Engine{
 	r.POST("/sentences/add",controller.Add)
 	r.POST("/sentences/update",controller.Update)
 	r.POST("/sentences/delete",controller.Delete)
-	r.POST("/file/upload",controller.FileUpload)
+	r.POST("/file/upload",controller.FilesUpload)
 	r.GET("/file/:name",controller.DownFile)
 
 	return r

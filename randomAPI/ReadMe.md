@@ -16,6 +16,8 @@ host 域名   eg:http://127.0.0.1
 
 随机视频： 域名+端口/video   上传文件 进入管理页面或进入文件目录./video
 
+随机图片： 域名+端口/picture   上传文件 进入管理页面或进入文件目录./picture
+
 随机句子：域名+端口/sentence   若要增删改句子 进入文件目录 ./sentence/st.go
 
 随机句子（mysql）：域名+端口/sentences   若要增删改句子进入管理页面
@@ -31,5 +33,5 @@ host 域名   eg:http://127.0.0.1
 
 
 
-目录 ./cache 为缓存文件，当上传的文件格式不是mp3，mp4则会把文件保存在cache中
+目录 ./cache 为缓存文件，当上传的文件格式不是mp3,mp4,jpg,jpeg,png则会把文件保存在cache中
 

@@ -41,6 +41,19 @@ func Music(c *gin.Context) {
 	c.Redirect(http.StatusTemporaryRedirect,paths)
 
 }
+func Picture(c *gin.Context) {
+	// 		b,_:= ioutil.ReadFile("./2.txt")
+	// 		x,_:=strconv.Atoi(string(b))
+	x:=PNums()
+	n:=rand.Intn(x)+1
+	//	 fmt.Println(n)
+	// 		 paths:=fmt.Sprintf("/file/%d.mp4",n)
+	// 		 c.Request.URL.Path=paths  //路由重定向
+	// 		 r.HandleContext(c)
+	paths:=fmt.Sprintf(config.CfgHost()+":"+config.CfgPort()+"/file/%d.png",n)
+	c.Redirect(http.StatusTemporaryRedirect,paths)
+
+}
 func Sentence(c *gin.Context){
 	c.JSON(200,sentence.ST())
 
@@ -49,6 +62,7 @@ func Admin(c *gin.Context) {
 	c.HTML(200,"admin.html",gin.H{//模板渲染
 		"video":VNums(),
 		"music":MNums(),
+		"picture":PNums(),
 		"sentence":SNums(),     //   http://127.0.0.1:8468/sentences/add
 		"SentencesAdd":config.CfgHost()+":"+config.CfgPort()+"/sentences/add",
 		"SentencesUpdate":config.CfgHost()+":"+config.CfgPort()+"/sentences/update",
@@ -70,6 +84,9 @@ func DownFile(c *gin.Context){
 	}
 	if string(b[len(b)-1])=="mp4"{
 		filename=path.Join("./video/",name)
+	}
+	if string(b[len(b)-1])=="jpg"||string(b[len(b)-1])=="png"||string(b[len(b)-1])=="jpeg"{
+		filename=path.Join("./picture/",name)
 	}
 
 	c.File(filename)//响应一个文件
@@ -94,6 +111,9 @@ func FileUpload(c *gin.Context) {
 	if string(b[len(b)-1])=="mp4"{
 		NewName=fmt.Sprintf("./video/%d.mp4",VNums()+1)
 	}
+	if string(b[len(b)-1])=="jpg"||string(b[len(b)-1])=="jpeg"||string(b[len(b)-1])=="png"{
+		NewName=fmt.Sprintf("./picture/%d.png",PNums()+1)
+	}
 
 	OldName := path.Join("./cache", f.Filename)
 	//NewName:=fmt.Sprintf("./2/%d.mp4",VNums()+1)
@@ -103,6 +123,45 @@ func FileUpload(c *gin.Context) {
 		"status": "ok",
 		"msg":b[len(b)-1],
 	})
+
+}
+func FilesUpload(c *gin.Context) {
+	var NewName string
+
+	//从请求中读取文件
+	form,err:=c.MultipartForm()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+	}
+	files:=form.File["f1"]
+
+	for _,f:=range files{
+		//将读取的文件保存在本地（服务端本地）
+		//dst:=fmt.Sprintf("./%s",f.Filename)
+		b:=strings.Split(f.Filename,".")
+		if string(b[len(b)-1])=="mp3"{
+			NewName=fmt.Sprintf("./music/%d.mp3",MNums()+1)
+		}
+		if string(b[len(b)-1])=="mp4"{
+			NewName=fmt.Sprintf("./video/%d.mp4",VNums()+1)
+		}
+		if string(b[len(b)-1])=="jpg"||string(b[len(b)-1])=="jpeg"||string(b[len(b)-1])=="png"{
+			NewName=fmt.Sprintf("./picture/%d.png",PNums()+1)
+		}
+
+		OldName := path.Join("./cache", f.Filename)
+		//NewName:=fmt.Sprintf("./2/%d.mp4",VNums()+1)
+		c.SaveUploadedFile(f, OldName)
+		os.Rename(OldName,NewName)
+		c.JSON(200, gin.H{
+			"status": "ok",
+			"msg":b[len(b)-1],
+		})
+	}
+
+
 
 }
 func GetAll(c *gin.Context){
@@ -201,5 +260,9 @@ func MNums()int{
 
 func VNums()int{
 	files,_:=ioutil.ReadDir("./video")
+	return 	len(files)
+}
+func PNums()int{
+	files,_:=ioutil.ReadDir("./picture")
 	return 	len(files)
 }

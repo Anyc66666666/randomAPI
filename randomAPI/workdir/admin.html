@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>Admin</title>
 </head>
 <body>
 
@@ -56,15 +56,18 @@
 <a style="color: #00e2fa;size: 188px" href={{ .SentencesAll }} title="点击查询所有句子" target="_blank">查询所有句子.</a>
 <br><br>
 
-<form action={{ .FileUpload }} method="post" enctype="multipart/form-data">
-    <input type="file" name="f1">
+<form action={{ .FileUpload }} method="post" enctype="multipart/form-data" >
+    <input type="file" name="f1" multiple="multiple">
     <!--    <input type="file" name="f1">-->
     <!--    <input type="file" name="f1">-->
     <input type="submit" value="上传">
     <br>
     <p>视频文件数： {{ .video }}</p>
     <p>音乐文件数： {{ .music }}</p>
+    <p>图片文件数： {{ .picture }}</p>
     <p>sql-sentence个数： {{ .sentence }}</p>
 </form>
+
+<audio id="audio" autoplay="autoplay" loop=""><source src="https://www.hlapi.cn/api/wyrb"></audio>
 </body>
 </html>
