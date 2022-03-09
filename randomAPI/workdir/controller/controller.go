@@ -170,7 +170,10 @@ func GetAll(c *gin.Context){
 		return}
 	var s []model.Sentences
 	dao.DB.Debug().Find(&s)
-	c.JSON(200,s)}
+	c.JSON(200,s)
+	dao.D.Close()
+}
+
 
 func GetRandom(c *gin.Context){
 	err:=dao.DbInit()
@@ -181,8 +184,14 @@ func GetRandom(c *gin.Context){
 	t:=dao.DB.Debug().Find(&s)
 	n:=rand.Intn(int(t.RowsAffected))+1
 	dao.DB.Debug().Where("id=?",n).First(&ss)
+	for {
+		if ss.Sentence == "" {
+			n++
+			dao.DB.Debug().Where("id=?", n).First(&ss)
+		}else {break}
+	}
 	c.JSON(200,ss.Sentence)
-
+	dao.D.Close()
 
 }
 func Add(c *gin.Context){
@@ -206,6 +215,7 @@ func Add(c *gin.Context){
 	c.JSON(200,gin.H{
 		"msg":"添加成功哦！",
 	})
+	dao.D.Close()
 }
 func Update(c *gin.Context){
 	err:=dao.DbInit()
@@ -213,18 +223,20 @@ func Update(c *gin.Context){
 		c.JSON(200,err)
 		return}
 	var s model.Sentences
-	err=c.ShouldBind(&s)
+	var SI model.ParamSI
+	err=c.ShouldBind(&SI)
+
 	if err!=nil{
 		c.JSON(200,err)
 		fmt.Printf("bind failed,err:%v\n",err)
 		return}
-	if strings.TrimSpace(s.Sentence)==""{
+	if strings.TrimSpace(SI.Sentence)==""{
 		return}
-	dao.DB.Debug().Where("id=?",s.ID).Update("sentence",s.Sentence)
+	dao.DB.Debug().Model(&s).Where("id=?",SI.ID).Update("sentence",SI.Sentence)
 	c.JSON(200,gin.H{
 		"msg":"修改成功哦！",
 	})
-
+	dao.D.Close()
 
 }
 func Delete(c *gin.Context){
@@ -244,6 +256,7 @@ func Delete(c *gin.Context){
 	c.JSON(200,gin.H{
 		"msg":"删除成功了呀!",
 	})
+	dao.D.Close()
 }
 
 func SNums()int{
@@ -252,6 +265,7 @@ func SNums()int{
 	var s []model.Sentences
 	t:=dao.DB.Debug().Find(&s)
 	return int(t.RowsAffected)
+	dao.D.Close()
 }
 func MNums()int{
 	files,_:=ioutil.ReadDir("./music")

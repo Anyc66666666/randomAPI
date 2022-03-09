@@ -12,6 +12,10 @@ type ParamS struct {
 type ParamI struct {
 	ID uint `form:"id" json:"id"`
 }
+type ParamSI struct {
+	Sentence string `form:"sentence" json:"sentence"`
+	ID uint `form:"id" json:"id"`
+}
 type Config struct {
 	DSN string `yaml:"dsn"`
 	HOST string `yaml:"host"`
